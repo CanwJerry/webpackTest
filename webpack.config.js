@@ -70,7 +70,11 @@ module.exports = {
 		// postcss-loader：兼容性问题，根据浏览器自动添加前缀
 		// 如果要用 less 或者是 sass 的话，还需要 less-loader 和 sass-loader
 		{
+			// 此处是用于匹配文件的
 			test: /\.css$/,
+			// style-loader负责将样式添加到DOM中
+			// css-loader只负责将css文件进行加载
+			// 使用多个loader时，是从右向左读的
 			use: [
 				'style-loader',
 				'css-loader',
