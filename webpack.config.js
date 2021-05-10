@@ -4,6 +4,7 @@
 
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin'); //将相关的js文件引入到html文件
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 module.exports = {
 	mode: 'development',
@@ -37,7 +38,8 @@ module.exports = {
 			template: './public/login.html',
 			filename: 'login.html', //打包后的文件名
 			chunks: ['login'] // 只引入login.js
-		})
+		}),
+		new VueLoaderPlugin()
 	],
 
 	module: {
@@ -121,6 +123,12 @@ module.exports = {
 					}
 				],
 				exclude: /node_modules/
+			},
+
+			{
+				test: /\.vue$/,
+        		loader: 'vue-loader',
+				exclude: /node_modules/
 			}
 		]
 	},
@@ -141,6 +149,16 @@ module.exports = {
 		clientLogLevel: "silent",
 		//是否启用 gzip 压缩
 		compress: true
+	},
+
+	// 解决一些路径问题
+	resolve: {
+		// 省略掉一些拓展名
+		extensions: ['.js', '.css', '.vue'],
+		alias: {
+			// 这样定义是为了解决通过import的方式引入的时候改变它默认的引用，从而指向当前路径，解决runtime-only报错问题
+			'vue$': 'vue/dist/vue.esm.js'
+		}
 	},
 
 	// 这样的设置即可开启sourceMap，开发模式下就可以映射到我们的源代码了
